@@ -9,15 +9,19 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { MailService } from 'src/mail/mail.service';
 import { RolesGuard } from 'src/roles.guard';
 import { LoginDTO, RegisterDTO } from './dtos/user.dto';
-import { User, UserDocument } from './schemas/user.schema';
+import { User } from './schemas/user.schema';
 import { UserService } from './user.service';
 
 @Controller('user')
 @UsePipes(new ValidationPipe({ whitelist: true }))
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private mailService: MailService,
+  ) {}
   @Post('register')
   async register(@Body() registerUser: RegisterDTO): Promise<User> {
     const user = await this.userService.get(registerUser.username);
@@ -37,5 +41,12 @@ export class UserController {
   @UseGuards(RolesGuard)
   async getUsers(): Promise<User[]> {
     return this.userService.getAll();
+  }
+  @Get('send')
+  async sendMail(): Promise<boolean> {
+    return await this.mailService.sendUserConfirmation(
+      'mkabilemahle@aosdeag.com',
+      'tokennnnnnn',
+    );
   }
 }

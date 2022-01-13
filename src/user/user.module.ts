@@ -9,6 +9,7 @@ import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserDocument, UserSchema } from './schemas/user.schema';
 import { AuthMiddleware } from './middleware/auth.middleware';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthMiddleware } from './middleware/auth.middleware';
         schema: UserSchema,
       },
     ]),
+    MailModule,
   ],
   controllers: [UserController],
   providers: [UserService],
