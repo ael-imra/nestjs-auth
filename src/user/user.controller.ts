@@ -45,7 +45,7 @@ export class UserController {
   @Get('send')
   async sendMail(): Promise<boolean> {
     return await this.mailService.sendUserConfirmation(
-      'mkabilemahle@aosdeag.com',
+      'zaiszais@supoz.site',
       'tokennnnnnn',
     );
   }

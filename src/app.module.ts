@@ -11,8 +11,8 @@ import { MailModule } from './mail/mail.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGO_URI),
-    UserModule,
     MailModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

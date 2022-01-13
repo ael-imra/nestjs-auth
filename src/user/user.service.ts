@@ -4,7 +4,6 @@ import { Model } from 'mongoose';
 import { User } from './schemas/user.schema';
 import { v4 as uuidv4 } from 'uuid';
 import { GetQueryDTO, RegisterDTO } from './dtos/user.dto';
-import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class UserService {
