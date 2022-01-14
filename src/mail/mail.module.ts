@@ -4,6 +4,11 @@ import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
+import {
+  Confirmation,
+  ConfirmationSchema,
+} from './schemas/confirmation.schema';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -28,6 +33,12 @@ import { ConfigModule } from '@nestjs/config';
         },
       },
     }),
+    MongooseModule.forFeature([
+      {
+        name: Confirmation.name,
+        schema: ConfirmationSchema,
+      },
+    ]),
   ],
   providers: [MailService],
   exports: [MailService],

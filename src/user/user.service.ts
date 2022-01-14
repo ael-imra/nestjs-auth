@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './schemas/user.schema';
@@ -18,11 +18,15 @@ export class UserService {
   async getAll(query?: GetQueryDTO): Promise<User[]> {
     return this.userModel.find(query);
   }
-  async generateToken(username: string): Promise<string> {
-    const token = uuidv4();
-    await this.userModel.updateOne({ username }, { token });
-    return token;
-  }
+  // async generateToken(email: string): Promise<string> {
+  //   const confirmation: Confirmation = await this.confirmationModel.findOne({
+  //     email,
+  //   });
+  //   if (new Date(confirmation.date).getTime() > new Date().getTime())
+  //     throw new BadRequestException('code already sent to your email')
+  //   const code =
+  //     return token;
+  // }
   // async sendValidationMail(email): Promise<boolean> {
   //   const code = this.generateCode(4);
   //   const mailLog = await this.mailService.sendMail({
