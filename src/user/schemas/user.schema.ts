@@ -13,7 +13,7 @@ export class User {
   @Prop()
   email: string;
   @Prop()
-  token: string;
+  valid: boolean;
 }
 
 export type UserDocument = User & Document;

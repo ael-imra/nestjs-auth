@@ -12,8 +12,8 @@ export class UserService {
     const user = new this.userModel(createUser);
     return user.save();
   }
-  async get(username: string): Promise<User> {
-    return this.userModel.findOne({ username });
+  async get(email: string): Promise<User> {
+    return this.userModel.findOne({ email });
   }
   async getAll(query?: GetQueryDTO): Promise<User[]> {
     return this.userModel.find(query);
@@ -41,7 +41,4 @@ export class UserService {
   //   console.log(mailLog);
   //   return !!mailLog;
   // }
-  generateCode(length): string {
-    return '2'.repeat(length);
-  }
 }

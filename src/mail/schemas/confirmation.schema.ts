@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 @Schema()
 export class Confirmation {
   @Prop()
-  code: number;
+  code: string;
   @Prop()
   email: string;
   @Prop({ type: 'date' })

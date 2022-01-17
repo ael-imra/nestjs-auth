@@ -1,6 +1,7 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { randomBytes } from 'crypto';
 import { Model } from 'mongoose';
 import { Confirmation } from './schemas/confirmation.schema';
 
@@ -13,13 +14,13 @@ export class MailService {
   ) {}
 
   async sendUserConfirmation(email: string): Promise<string> {
-    const conf: Confirmation = await this.confirmationModel.findOne({ email });
-    if (new Date(conf.date).getTime() > new Date().getTime())
+    const conf = await this.confirmationModel.findOne({ email });
+    if (conf && new Date(conf.date).getTime() > new Date().getTime())
       throw new BadRequestException('code already sent to your email');
-    const code = this.generateCode(6);
+    const code = randomBytes(6).toString('hex');
     const updateLog = await this.confirmationModel.updateOne(
       { email },
-      { code, date: new Date().getTime() * 60 * 60 * 1000 },
+      { code, date: new Date(new Date().getTime() * 60 * 60 * 1000) },
       { upsert: true },
     );
     const mailLog = await this.mailerService.sendMail({
@@ -31,13 +32,10 @@ export class MailService {
       ? 'mail sent successfully'
       : 'something went wrong';
   }
-  generateCode(length): string {
-    const codes = '0123456789';
-    let code: string = '';
-    for (let i = 0; i < length; i++) {
-      const random: number = Math.floor(Math.random() * 10);
-      code = `${code}${codes[random]}`;
-    }
-    return code;
+  async checkCodeConfirmation(email: string, code: string): Promise<boolean> {
+    const confirmation = await this.confirmationModel.findOne({ email, code });
+    if (!confirmation) throw new BadRequestException('invalid code');
+    await this.confirmationModel.deleteOne({ _id: confirmation._id });
+    return true;
   }
 }
